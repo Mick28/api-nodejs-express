@@ -1,19 +1,24 @@
 {
-  "name": "product-manager-cli",
+  "name": "api-rest-node",
   "version": "1.0.0",
-  "description": "Herramienta CLI para gestionar productos usando FakeStore API",
+  "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
-  "keywords": [
-    "cli",
-    "products",
-    "fakestore",
-    "api"
-  ],
-  "author": "Escurra Miguel Angel",
-  "license": "MIT"
-
+  "author": "Miguel Angel Escurra",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "firebase": "^11.10.0",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
 }
