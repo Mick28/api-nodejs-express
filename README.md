@@ -2,7 +2,7 @@
 
 🛠 **Proyecto Final NodeJS**.
 
-API REST para administrar productos (CRUD) con autenticación por JWT y acceso a datos en Firebase Firestore.
+API REST para administrar productos (CRUD) con autenticación por JWT y acceso a datos mediante Firebase Firestore.
 Arquitectura en capas: **routes → controllers → services → models** + middlewares y provider de Firebase.
 
 ## 📦 Requerimientos cumplidos
@@ -91,7 +91,7 @@ curl -s http://localhost:3000/api/products
 
 # Crear (protegido)
 TOKEN="..."
-curl -s -X POST http://localhost:3000/api/products/create -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json"       -d '{"title":"Remera Azul","price":1999.99,"category":"indumentaria","description":"100% algodón"}'
+curl -s -X POST http://localhost:3000/api/products/create -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json"       -d '{"name":"Remera Azul","price":1999.99,"categories":"indumentaria"}'
 ```
 
 ---
@@ -106,7 +106,7 @@ MIT
 
 ## 👨‍💻 Autor
 
-Desarrollado por Miguel A. Escurra como proyecto educativo de Talento-Tech para aprender gestión de API REST, administrar productos (CRUD) con autenticación por JWT y acceso a datos en Firebase Firestore.
+Desarrollado por Miguel Angel Escurra como proyecto educativo de Talento-Tech para aprender gestión de API REST, administrar productos (CRUD) con autenticación por JWT y acceso a datos mediante Firebase Firestore.
 
 ---
 

@@ -1,3 +1,4 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
@@ -11,12 +12,10 @@ const firebaseConfig = {
   appId: process.env.FIREBASE_APP_ID,
 };
 
-// Validación básica de config
-/* for (const [k, v] of Object.entries(firebaseConfig)) {
-  if (!v) {
-    console.warn(`[WARN] Variable Firebase faltante: ${k}. Revisa tu .env`);
-  }
-} */
-
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+
+// Initialize Firestore
+const db = getFirestore(app);
+
+export { db };

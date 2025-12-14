@@ -1,38 +1,16 @@
+import "dotenv/config";
 import express from "express";
-import cors from "cors";
-import bodyParser from "body-parser";
-import dotenv from "dotenv";
-import {
-  notFoundHandler,
-  errorHandler,
-} from "./src/middlewares/error.middleware.js";
-import productsRouter from "./src/routes/products.routes.js";
-import authRouter from "./src/routes/auth.routes.js";
-
-dotenv.config();
+import productsRouter from "./src/routes/products.router.js";
 
 const app = express();
+app.use(express.json());
 
-// Middlewares globales
-app.use(cors());
-app.use(bodyParser.json());
+app.use("/api", productsRouter);
 
-// Rutas
-app.use("/api/products", productsRouter);
-app.use("/auth", authRouter);
-
-// Ruta base
-app.get("/", (req, res) => {
-  res.json({ ok: true, service: "Products API", version: "1.0.0" });
+app.use((req, res, next) => {
+  res.status(404).json({ error: "Not Found" });
 });
-
-// 404
-app.use(notFoundHandler);
-
-// Manejo centralizado de errores
-app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`[OK] Server listening on http://localhost:${PORT}`);
-});
+
+app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
