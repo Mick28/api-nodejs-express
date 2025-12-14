@@ -1,0 +1,106 @@
+{
+  "client": "Thunder Client",
+  "collectionName": "Products API (firebase-admin)",
+  "dateExported": "2025-11-06T00:21:54.698689Z",
+  "version": "1.1",
+  "folders": [],
+  "requests": [
+    {
+      "name": "Health",
+      "url": "{{baseUrl}}/",
+      "method": "GET"
+    },
+    {
+      "name": "Login",
+      "url": "{{baseUrl}}/auth/login",
+      "method": "POST",
+      "body": {
+        "type": "json",
+        "raw": "{\"username\": \"admin\", \"password\": \"admin\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "name": "List Products",
+      "url": "{{baseUrl}}/api/products",
+      "method": "GET"
+    },
+    {
+      "name": "Get Product by ID",
+      "url": "{{baseUrl}}/api/products/:id",
+      "method": "GET",
+      "params": [
+        {
+          "name": "id",
+          "value": "REPLACE_ID"
+        }
+      ]
+    },
+    {
+      "name": "Create Product (auth)",
+      "url": "{{baseUrl}}/api/products/create",
+      "method": "POST",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\"title\": \"Remera Azul\", \"price\": 1999.99, \"category\": \"indumentaria\", \"description\": \"100% algodon\"}"
+      }
+    },
+    {
+      "name": "Update Product (auth)",
+      "url": "{{baseUrl}}/api/products/:id",
+      "method": "PUT",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ],
+      "params": [
+        {
+          "name": "id",
+          "value": "REPLACE_ID"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\"price\": 2499.99}"
+      }
+    },
+    {
+      "name": "Delete Product (auth)",
+      "url": "{{baseUrl}}/api/products/:id",
+      "method": "DELETE",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ],
+      "params": [
+        {
+          "name": "id",
+          "value": "REPLACE_ID"
+        }
+      ]
+    }
+  ]
+}
