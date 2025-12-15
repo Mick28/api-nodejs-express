@@ -1,16 +1,13 @@
 import "dotenv/config";
-import express from "express";
-import productsRouter from "./src/routes/products.router.js";
+import { createApp } from "./src/app.js";
 
-const app = express();
-app.use(express.json());
+const app = createApp();
 
-app.use("/api", productsRouter);
+// En Vercel (Serverless), NO se debe llamar app.listen.
+// Para correr local, sí.
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
+}
 
-app.use((req, res, next) => {
-  res.status(404).json({ error: "Not Found" });
-});
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
+export default app;

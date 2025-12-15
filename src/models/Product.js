@@ -17,7 +17,7 @@ export const getAllProducts = async () => {
     const snapshot = await getDocs(productsCollection);
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
@@ -27,7 +27,7 @@ export const getProductById = async (id) => {
     const snapshot = await getDoc(productRef);
     return snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } : null;
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
@@ -36,12 +36,11 @@ export const createProduct = async (data) => {
     const docRef = await addDoc(productsCollection, data);
     return { id: docRef.id, ...data };
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
 export const updateProduct = async (id, productData) => {
-  console.log(id, productData);
   try {
     const productRef = doc(productsCollection, id);
     const snapshot = await getDoc(productRef);
@@ -53,7 +52,7 @@ export const updateProduct = async (id, productData) => {
     await updateDoc(productRef, productData);
     return { id, ...productData };
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
@@ -69,6 +68,6 @@ export const deleteProduct = async (id) => {
     await deleteDoc(productRef);
     return true;
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };

@@ -1,115 +1,263 @@
-# 🧩 Products API · Node + Express + Firestore + JWT
+# API REST – Node.js + Express + Firebase (Firestore) + JWT
 
-🛠 **Proyecto Final NodeJS**.
+API REST desarrollada en **Node.js + Express**, con **Firestore (Firebase)** como base de datos en la nube, **autenticación JWT para usuario administrador**, arquitectura por capas y **deploy en Vercel**.
 
-API REST para administrar productos (CRUD) con autenticación por JWT y acceso a datos mediante Firebase Firestore.
-Arquitectura en capas: **routes → controllers → services → models** + middlewares y provider de Firebase.
+---
 
-## 📦 Requerimientos cumplidos
+## 🎯 Objetivo del proyecto
 
-- Configuración inicial (ESModules, `npm init -y`, script `start`).
-- Dependencias: `express`, `cors`, `body-parser`, `dotenv`, `firebase`, `jsonwebtoken`.
-- Servidor Express con CORS, `body-parser.json()`, 404 y manejo centralizado de errores.
-- Rutas:
-  - `GET /api/products` – listar productos (público)
-  - `GET /api/products/:id` – obtener producto (público)
-  - `POST /api/products/create` – crear (protegido)
-  - `PUT /api/products/:id` – actualizar (protegido)
-  - `DELETE /api/products/:id` – eliminar (protegido)
-  - `POST /auth/login` – login y retorno de **Bearer Token**
-- Controladores y servicios separados.
-- Modelos conectados a **Firestore**.
-- Middleware `authMiddleware` con **JWT** para proteger rutas.
-- Manejo de errores con 400/401/403/404/500.
+Brindar una API REST segura para la **gestión de productos** (CRUD completo), permitiendo:
 
-## 🚀 Puesta en marcha
+- Acceso **público** a la lectura de productos
+- Acceso **protegido** (JWT) para creación, actualización y eliminación
+- Autenticación de un **usuario administrador**
+- Persistencia de datos en **Firestore**
+- Arquitectura escalable y mantenible
+- Manejo correcto de errores HTTP
+
+---
+
+## 🧱 Tecnologías utilizadas
+
+- Node.js
+- Express.js
+- Firebase / Firestore
+- jsonwebtoken (JWT)
+- dotenv
+- Vercel (Serverless Functions)
+
+---
+
+## 📁 Estructura del proyecto
+
+```
+api-nodejs-express/
+│
+├── api/
+│   └── index.js              # Entry point para Vercel
+│
+├── src/
+│   ├── config/
+│   │   └── firebase.js       # Configuración Firebase / Firestore
+│   │
+│   ├── controllers/
+│   │   ├── auth.controller.js
+│   │   └── products.controller.js
+│   │
+│   ├── middlewares/
+│   │   ├── auth.middleware.js    # Validación JWT
+│   │   └── error.middleware.js   # Manejo de errores
+│   │
+│   ├── models/
+│   │   └── product.model.js
+│   │
+│   ├── routes/
+│   │   ├── auth.routes.js
+│   │   └── products.routes.js
+│   │
+│   ├── services/
+│   │   ├── auth.service.js
+│   │   └── products.service.js
+│   │
+│   └── app.js                # Configuración Express
+│
+├── index.js                  # Ejecución local
+├── vercel.json               # Configuración Vercel
+├── package.json
+├── .env.example
+└── README.md
+```
+
+---
+
+## 🔐 Autenticación
+
+La API implementa **JWT (JSON Web Token)** para proteger las rutas sensibles.
+
+### Usuario administrador
+
+Las credenciales se definen por variables de entorno:
+
+```
+ADMIN_USER=admin
+ADMIN_PASS=admin
+```
+
+---
+
+## 🌐 Endpoints disponibles
+
+### 🔑 Autenticación
+
+#### Login
+
+```
+POST /auth/login
+```
+
+**Body:**
+
+```json
+{
+  "username": "admin",
+  "password": "admin"
+}
+```
+
+**Respuesta:**
+
+```json
+{
+  "token": "<jwt>",
+  "token_type": "Bearer"
+}
+```
+
+---
+
+### 📦 Productos
+
+#### Obtener todos los productos (público)
+
+```
+GET /api/products
+```
+
+#### Obtener producto por ID (público)
+
+```
+GET /api/products/:id
+```
+
+#### Crear producto (protegido)
+
+```
+POST /api/products/create
+```
+
+**Headers:**
+
+```
+Authorization: Bearer <token>
+```
+
+**Body:**
+
+```json
+{
+  "name": "Producto X",
+  "price": 1200,
+  "categories": ["tech", "hogar"]
+}
+```
+
+#### Actualizar producto (protegido)
+
+```
+PUT /api/products/:id
+```
+
+#### Eliminar producto (protegido)
+
+```
+DELETE /api/products/:id
+```
+
+---
+
+## ⚠️ Manejo de errores
+
+La API responde correctamente ante:
+
+- **400** – Datos inválidos
+- **401** – Token no enviado
+- **403** – Token inválido o expirado
+- **404** – Ruta no encontrada
+- **500** – Error interno
+
+---
+
+## 🔧 Variables de entorno
+
+Crear un archivo `.env` basado en `.env.example`:
+
+```
+PORT=3000
+JWT_SECRET=super_secret_key
+JWT_EXPIRES_IN=1h
+
+ADMIN_USER=admin
+ADMIN_PASS=admin
+
+FIREBASE_API_KEY=
+FIREBASE_AUTH_DOMAIN=
+FIREBASE_PROJECT_ID=
+FIREBASE_STORAGE_BUCKET=
+FIREBASE_MESSAGING_SENDER_ID=
+FIREBASE_APP_ID=
+```
+
+---
+
+## ▶️ Ejecución local
 
 ```bash
 npm install
-cp .env.example .env
-# Completa .env con las credenciales de app Web Firebase y JWT_SECRET
 npm run dev
 ```
 
-### Login de demostración
-
-- Usuario y contraseña en `.env`: `ADMIN_USER` / `ADMIN_PASS` (por defecto admin/admin)
-- Petición:
-
-  ```http
-  POST /auth/login
-  Content-Type: application/json
-
-  { "username": "admin", "password": "admin" }
-  ```
-
-  Respuesta:
-
-  ```json
-  { "token": "eyJhbGciOiJI...", "token_type": "Bearer" }
-  ```
-
-### Usar el token
-
-Incluye el header `Authorization: Bearer <token>` en las rutas protegidas.
-
-## 🗂 Estructura
+Servidor disponible en:
 
 ```
-src/
-  controllers/
-  middlewares/
-  models/
-  providers/
-  routes/
-  services/
-  utils/
-  index.js
-```
-
-## 🗄 Firestore
-
-- Proyecto para Firebase y una **app Web** para obtener credenciales.
-- En Firestore, se creó la colección `products` y un primer documento (por ejemplo con `title`, `price`, `category`).
-- **Nota**: se usa el SDK Web (`firebase`) por requisito del enunciado. Para entornos productivos de servidor se recomienda `firebase-admin`.
-
-## 🔐 Seguridad y errores
-
-- 401 si falta token, 403 si token inválido/expirado.
-- 404 para rutas inexistentes.
-- 400 para validaciones de entrada.
-- 500 ante errores no controlados.
-
-## 🧪 Ejemplos con cURL
-
-```bash
-# Login
-curl -s -X POST http://localhost:3000/auth/login -H "Content-Type: application/json"       -d '{"username":"admin","password":"admin"}'
-
-# Listar productos (público)
-curl -s http://localhost:3000/api/products
-
-# Crear (protegido)
-TOKEN="..."
-curl -s -X POST http://localhost:3000/api/products/create -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json"       -d '{"name":"Remera Azul","price":1999.99,"categories":"indumentaria"}'
+http://localhost:3000
 ```
 
 ---
 
-## 🤝 Contribuciones
+## ☁️ Deploy en Vercel
 
-¿Tienes ideas para mejorar este proyecto? ¡Las contribuciones son bienvenidas!
+1. Subir el repositorio a GitHub
+2. Crear un nuevo proyecto en Vercel
+3. Configurar todas las variables de entorno
+4. Deploy automático
 
-## 📄 Licencia
+La API quedará accesible en:
 
-MIT
+```
+https://tu-proyecto.vercel.app
+```
+
+---
+
+## 🧪 Pruebas con Postman / Thunder Client
+
+1. Ejecutar `POST /auth/login`
+2. Copiar el token JWT
+3. Enviar el token en el header:
+
+```
+Authorization: Bearer <token>
+```
+
+4. Probar endpoints protegidos
+
+---
+
+## ✅ Estado del proyecto
+
+✔ Arquitectura por capas
+✔ Autenticación JWT
+✔ Firestore
+✔ CRUD completo
+✔ Manejo de errores
+✔ Listo para producción
+
+---
 
 ## 👨‍💻 Autor
 
-Desarrollado por Miguel Angel Escurra como proyecto educativo de Talento-Tech para aprender gestión de API REST, administrar productos (CRUD) con autenticación por JWT y acceso a datos mediante Firebase Firestore.
+Desarrollado por Miguel Angel Escurra como proyecto educativo de Talento-Tech con el profesor Jean Paul Ferreira para aprender gestión de API REST, administrar productos (CRUD) con autenticación por JWT y acceso a datos mediante Firebase Firestore.
 
 ---
 
-⭐ Si te ha sido útil este proyecto, no olvides darle una estrella
-
-**¡Feliz Coding!** 🚀
+**Proyecto académico – API REST con Node.js y Firebase**

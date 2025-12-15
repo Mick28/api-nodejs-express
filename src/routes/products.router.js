@@ -1,7 +1,4 @@
 import { Router } from "express";
-
-const router = Router();
-
 import {
   getAllProducts,
   getProductById,
@@ -9,11 +6,17 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/products.controller.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
 
+const router = Router();
+
+// Públicos
 router.get("/products", getAllProducts);
 router.get("/products/:id", getProductById);
-router.post("/products", createProduct);
-router.put("/products/:id", updateProduct);
-router.delete("/products/:id", deleteProduct);
+
+// Protegidos
+router.post("/products/create", authMiddleware, createProduct);
+router.put("/products/:id", authMiddleware, updateProduct);
+router.delete("/products/:id", authMiddleware, deleteProduct);
 
 export default router;

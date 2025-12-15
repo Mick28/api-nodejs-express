@@ -1,52 +1,49 @@
-import * as model from "../models/Product.js";
+import * as service from "../services/products.service.js";
 
-export const getAllProducts = async (req, res) => {
-  res.json(await model.getAllProducts());
-};
-
-export const getProductById = async (req, res) => {
-  const { id } = req.params;
-  const product = await model.getProductById(id);
-  if (!product) {
-    return res.status(404).json({ error: "Not Found" });
+export async function getAllProducts(req, res, next) {
+  try {
+    const products = await service.listProducts();
+    res.json(products);
+  } catch (err) {
+    next(err);
   }
-  res.json(product);
-};
+}
 
-export const createProduct = async (req, res) => {
-  if (typeof req.body.name == undefined) {
-    return res.status(422).json({ error: "El nombre es obligatorio" });
+export async function getProductById(req, res, next) {
+  try {
+    const { id } = req.params;
+    const product = await service.getProduct(id);
+    res.json(product);
+  } catch (err) {
+    next(err);
   }
+}
 
-  const { name, price, categories } = req.body;
-
-  const product = await model.createProduct({ name, price, categories });
-
-  res.status(201).json(product);
-};
-
-export const updateProduct = async (req, res) => {
-  const { id } = req.params;
-  const { name, price, categories } = req.body;
-
-  const updatedProduct = await model.updateProduct(id, { name, price, categories });
-  
-  if (!updatedProduct) {
-    return res.status(404).json({ error: "Not Found" });
+export async function createProduct(req, res, next) {
+  try {
+    const product = await service.createProduct(req.body);
+    res.status(201).json(product);
+  } catch (err) {
+    next(err);
   }
-  
-  res.json(updatedProduct);
-};
+}
 
-
-export const deleteProduct = async (req, res) => {
-  const { id } = req.params;
-
-  const deleted = await model.deleteProduct(id);
-
-  if (!deleted) {
-    return res.status(404).json({ error: "Not Found" });
+export async function updateProduct(req, res, next) {
+  try {
+    const { id } = req.params;
+    const updated = await service.updateProduct(id, req.body);
+    res.json(updated);
+  } catch (err) {
+    next(err);
   }
+}
 
-  res.json({ message: "Product deleted" });
-};
+export async function deleteProduct(req, res, next) {
+  try {
+    const { id } = req.params;
+    await service.deleteProduct(id);
+    res.json({ message: "Product deleted" });
+  } catch (err) {
+    next(err);
+  }
+}
