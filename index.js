@@ -7,7 +7,7 @@ const app = createApp();
 // Para correr local, sí.
 if (!process.env.VERCEL) {
   const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
+  // app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
 }
 
 export default app;
